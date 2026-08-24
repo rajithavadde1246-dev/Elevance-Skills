@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Movie</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        .container {
+            width: 60%;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        input,
+        select {
+            padding: 10px;
+            width: 100%;
+            margin-top: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 12px 25px;
+            margin-top: 20px;
+            background: #222;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .success {
+            color: green;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🎟 Book {{ movie.title }}</h1>
+
+    <p>
+        <strong>Movie:</strong>
+        {{ movie.title }}
+    </p>
+
+    <hr>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="error">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <label>
+            <strong>Select Show:</strong>
+        </label>
+
+        <select name="show" required>
+
+            <option value="">
+                -- Select Show --
+            </option>
+
+            {% for show in shows %}
+                <option value="{{ show.id }}">
+                    {{ show.theater.name }}
+                    -
+                    {{ show.start_time|date:"d M Y, h:i A" }}
+                    -
+                    ₹{{ show.price }}
+                    -
+                    {{ show.available_seats }} seats available
+                </option>
+            {% empty %}
+                <option value="">
+                    No shows available
+                </option>
+            {% endfor %}
+
+        </select>
+
+        <br><br>
+
+        <label>
+            <strong>Number of Seats:</strong>
+        </label>
+
+        <input
+            type="number"
+            name="seats"
+            min="1"
+            max="10"
+            placeholder="Enter number of seats"
+            value="{{ form.seats.value|default:'' }}"
+            required
+        >
+
+        {% if form.seats.errors %}
+            <div class="error">
+                {{ form.seats.errors }}
+            </div>
+        {% endif %}
+
+        <button type="submit">
+            Confirm Booking
+        </button>
+
+    </form>
+
+    <a href="{% url 'movie_detail' movie.id %}">
+        ← Back to Movie
+    </a>
+
+</div>
+
+</body>
+</html>
