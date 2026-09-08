@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Seat Reservation</title>
+</head>
+
+<body>
+
+    <h1>Smart Seat Reservation</h1>
+
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ user.username }}!</p>
+
+        <a href="{% url 'logout_view' %}">Logout</a>
+        |
+        <a href="{% url 'my_bookings' %}">My Bookings</a>
+    {% else %}
+        <a href="{% url 'login_view' %}">Login</a>
+    {% endif %}
+
+    <hr>
+
+    <h2>Available Movie Shows</h2>
+
+    {% for show in shows %}
+
+        <div>
+            <h3>{{ show.movie_name }}</h3>
+
+            <p>
+                <strong>Theater:</strong>
+                {{ show.theater_name }}
+            </p>
+
+            <p>
+                <strong>Show Time:</strong>
+                {{ show.show_time|date:"d M Y, h:i A" }}
+            </p>
+
+            <a href="{% url 'show_seats' show.id %}">
+                Book Seats
+            </a>
+        </div>
+
+        <hr>
+
+    {% empty %}
+
+        <p>No movie shows available.</p>
+
+    {% endfor %}
+
+</body>
+</html>

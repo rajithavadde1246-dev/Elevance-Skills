@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ movie.title }}</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        .container {
+            width: 70%;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #222;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 5px 10px 0;
+        }
+
+        .review {
+            background: #f4f4f4;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .review strong {
+            font-size: 17px;
+        }
+
+        .review p {
+            margin: 8px 0;
+        }
+
+        .verified {
+            color: green;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .no-reviews {
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🎬 {{ movie.title }}</h1>
+
+    <p>
+        <strong>Description:</strong>
+        {{ movie.description }}
+    </p>
+
+    <p>
+        <strong>Language:</strong>
+        {{ movie.language }}
+    </p>
+
+    <p>
+        <strong>Genre:</strong>
+        {{ movie.genre.all|join:", " }}
+    </p>
+
+    <p>
+        <strong>Cast:</strong>
+        {{ movie.cast.all|join:", " }}
+    </p>
+
+    <p>
+        <strong>Release Date:</strong>
+        {{ movie.release_date }}
+    </p>
+
+    <hr>
+
+    <a class="button" href="{% url 'book_movie' movie.id %}">
+        🎟 Book Movie
+    </a>
+
+    <a class="button" href="{% url 'add_review' movie.id %}">
+        ⭐ Add Review
+    </a>
+
+    <hr>
+
+    <h2>⭐ Reviews</h2>
+
+    {% for review in movie.reviews.all %}
+
+        {% if not review.is_reported %}
+
+            <div class="review">
+
+                <strong>
+                    {{ review.user.username }}
+                </strong>
+
+                {% if review.is_verified_viewer %}
+                    <span class="verified">
+                        ✅ Verified Viewer
+                    </span>
+                {% endif %}
+
+                <p>
+                    <strong>Rating:</strong>
+
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= review.rating %}
+                            ⭐
+                        {% endif %}
+                    {% endfor %}
+                </p>
+
+                <p>
+                    <strong>Comment:</strong>
+                    {{ review.comment }}
+                </p>
+
+                <small>
+                    Posted on
+                    {{ review.created_at|date:"d M Y, h:i A" }}
+                </small>
+
+            </div>
+
+        {% endif %}
+
+    {% empty %}
+
+        <p class="no-reviews">
+            No reviews yet. Be the first to review this movie!
+        </p>
+
+    {% endfor %}
+
+    <br>
+
+    <a href="{% url 'home' %}">
+        ← Back to Home
+    </a>
+
+</div>
+
+</body>
+
+</html>
