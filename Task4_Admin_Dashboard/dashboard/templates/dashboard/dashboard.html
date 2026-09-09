@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Movie Booking Admin Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        .header {
+            background: #1f2937;
+            color: white;
+            padding: 20px 35px;
+        }
+
+        .header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 0;
+            font-size: 15px;
+        }
+
+        .container {
+            width: 94%;
+            max-width: 1400px;
+            margin: 25px auto;
+        }
+
+        .filter-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .filter-box h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .filter-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input[type="date"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button,
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .apply-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .reset-btn {
+            background: #6b7280;
+            color: white;
+        }
+
+        .export-btn {
+            background: #16a34a;
+            color: white;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            margin: 0 0 10px;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .card .value {
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        .section {
+            background: white;
+            padding: 22px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            margin-top: 0;
+            margin-bottom: 18px;
+            font-size: 21px;
+        }
+
+        .revenue-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .revenue-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .revenue-card h3 {
+            margin: 0 0 8px;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .revenue-card p {
+            margin: 0;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f1f5f9;
+            text-align: left;
+            padding: 12px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+        }
+
+        .status-confirmed {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .status-cancelled {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            color: #ca8a04;
+            font-weight: bold;
+        }
+
+        .booking-table {
+            overflow-x: auto;
+        }
+
+        .booking-table table {
+            min-width: 900px;
+        }
+
+        .percentage {
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+
+        @media (max-width: 1100px) {
+            .cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 800px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .revenue-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .cards,
+            .revenue-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 96%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Movie Booking Admin Dashboard</h1>
+
+    <p>
+        Welcome,
+        <strong>{{ request.user.username }}</strong>
+    </p>
+</div>
+
+
+<div class="container">
+
+    <!-- DATE FILTER -->
+    <div class="filter-box">
+
+        <h2>Dashboard Filters</h2>
+
+        <form method="get" class="filter-form">
+
+            <div class="form-group">
+                <label for="start_date">From:</label>
+
+                <input
+                    type="date"
+                    id="start_date"
+                    name="start_date"
+                    value="{{ start_date }}"
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="end_date">To:</label>
+
+                <input
+                    type="date"
+                    id="end_date"
+                    name="end_date"
+                    value="{{ end_date }}"
+                >
+            </div>
+
+
+            <button type="submit" class="apply-btn">
+                Apply Filter
+            </button>
+
+
+            <a
+                href="{% url 'dashboard_home' %}"
+                class="btn reset-btn"
+            >
+                Reset
+            </a>
+
+
+            <a
+                href="{% url 'export_csv' %}?start_date={{ start_date }}&end_date={{ end_date }}"
+                class="btn export-btn"
+            >
+                Export CSV
+            </a>
+
+        </form>
+
+    </div>
+
+
+    <!-- BASIC STATISTICS -->
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Total Revenue</h3>
+
+            <div class="value">
+                ₹{{ total_revenue|floatformat:2 }}
+            </div>
+        </div>
+
+
+        <div class="card">
+            <h3>Total Bookings</h3>
+
+            <div class="value">
+                {{ total_bookings }}
+            </div>
+        </div>
+
+
+        <div class="card">
+            <h3>Confirmed</h3>
+
+            <div class="value">
+                {{ confirmed_bookings }}
+            </div>
+        </div>
+
+
+        <div class="card">
+            <h3>Cancelled</h3>
+
+            <div class="value">
+                {{ cancelled_bookings }}
+            </div>
+        </div>
+
+
+        <div class="card">
+            <h3>Users</h3>
+
+            <div class="value">
+                {{ total_users }}
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- REVENUE OVERVIEW -->
+
+    <div class="section">
+
+        <h2>Revenue Overview</h2>
+
+        <div class="revenue-grid">
+
+            <div class="revenue-card">
+                <h3>Daily</h3>
+
+                <p>
+                    ₹{{ daily_revenue|floatformat:2 }}
+                </p>
+            </div>
+
+
+            <div class="revenue-card">
+                <h3>Weekly</h3>
+
+                <p>
+                    ₹{{ weekly_revenue|floatformat:2 }}
+                </p>
+            </div>
+
+
+            <div class="revenue-card">
+                <h3>Monthly</h3>
+
+                <p>
+                    ₹{{ monthly_revenue|floatformat:2 }}
+                </p>
+            </div>
+
+
+            <div class="revenue-card">
+                <h3>Yearly</h3>
+
+                <p>
+                    ₹{{ yearly_revenue|floatformat:2 }}
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CANCELLATION AND REFUND -->
+
+    <div class="section">
+
+        <h2>Cancellation & Refund Statistics</h2>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>Cancelled Bookings</td>
+
+                    <td>
+                        {{ cancelled_bookings }}
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>Refund Count</td>
+
+                    <td>
+                        {{ refund_count }}
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>Refund Amount</td>
+
+                    <td>
+                        ₹{{ refund_amount|floatformat:2 }}
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- MOVIES AND THEATERS -->
+
+    <div class="two-column">
+
+        <!-- MOST BOOKED MOVIES -->
+
+        <div class="section">
+
+            <h2>Most Booked Movies</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Movie</th>
+                        <th>Bookings</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for movie in most_booked_movies %}
+
+                    <tr>
+
+                        <td>
+                            {{ movie.movie__name }}
+                        </td>
+
+                        <td>
+                            {{ movie.booking_count }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="2" class="empty">
+                            No booking data available.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- TOP THEATERS -->
+
+        <div class="section">
+
+            <h2>Top Performing Theaters</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Theater</th>
+                        <th>Bookings</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for theater in top_theaters %}
+
+                    <tr>
+
+                        <td>
+                            {{ theater.theater__name }}
+                        </td>
+
+                        <td>
+                            {{ theater.booking_count }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="2" class="empty">
+                            No theater data available.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- THEATER OCCUPANCY -->
+
+    <div class="section">
+
+        <h2>Theater Occupancy</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Theater</th>
+                    <th>Total Seats</th>
+                    <th>Seats Booked</th>
+                    <th>Occupancy</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for theater in theater_occupancy %}
+
+                <tr>
+
+                    <td>
+                        {{ theater.name }}
+                    </td>
+
+
+                    <td>
+                        {{ theater.total_seats }}
+                    </td>
+
+
+                    <td>
+                        {{ theater.seats_booked|default:0 }}
+                    </td>
+
+
+                    <td class="percentage">
+
+                        {{ theater.occupancy_percentage|default:0 }}%
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="4" class="empty">
+                        No theater data available.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- PEAK BOOKING HOURS -->
+
+    <div class="section">
+
+        <h2>Peak Booking Hours</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Hour</th>
+                    <th>Bookings</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for hour in peak_hours %}
+
+                <tr>
+
+                    <td>
+
+                        {% if hour.booking_hour is not None %}
+
+                            {{ hour.booking_hour|stringformat:"02d" }}:00
+
+                        {% else %}
+
+                            Unknown
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+                        {{ hour.total }}
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="2" class="empty">
+                        No booking data available.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- BOOKING TRENDS -->
+
+    <div class="section">
+
+        <h2>Booking Trends</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Date</th>
+                    <th>Bookings</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for trend in booking_trend %}
+
+                <tr>
+
+                    <td>
+                        {{ trend.booking_date|date:"M d, Y" }}
+                    </td>
+
+                    <td>
+                        {{ trend.total }}
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="2" class="empty">
+                        No booking data available.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- USER GROWTH -->
+
+    <div class="section">
+
+        <h2>User Growth Reports</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Date</th>
+                    <th>Users</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for growth in user_growth %}
+
+                <tr>
+
+                    <td>
+                        {{ growth.registration_date|date:"M d, Y" }}
+                    </td>
+
+                    <td>
+                        {{ growth.users }}
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="2" class="empty">
+                        No user growth data available.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- BOOKING DETAILS -->
+
+    <div class="section">
+
+        <h2>Booking Details</h2>
+
+        <div class="booking-table">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>User</th>
+                        <th>Movie</th>
+                        <th>Theater</th>
+                        <th>Amount</th>
+                        <th>Seats</th>
+                        <th>Status</th>
+                        <th>Booked At</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for booking in bookings %}
+
+                    <tr>
+
+                        <td>
+                            {{ booking.id }}
+                        </td>
+
+
+                        <td>
+                            {{ booking.user.username }}
+                        </td>
+
+
+                        <td>
+                            {{ booking.movie.name }}
+                        </td>
+
+
+                        <td>
+                            {{ booking.theater.name }}
+                        </td>
+
+
+                        <td>
+                            ₹{{ booking.amount|floatformat:2 }}
+                        </td>
+
+
+                        <td>
+                            {{ booking.seats_booked }}
+                        </td>
+
+
+                        <td>
+
+                            {% if booking.status == "confirmed" %}
+
+                                <span class="status-confirmed">
+                                    Confirmed
+                                </span>
+
+                            {% elif booking.status == "cancelled" %}
+
+                                <span class="status-cancelled">
+                                    Cancelled
+                                </span>
+
+                            {% else %}
+
+                                <span class="status-pending">
+                                    Pending
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+                            {{ booking.booked_at|date:"M d, Y H:i" }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="8" class="empty">
+                            No booking records available.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="footer">
+
+    Movie Booking Admin Dashboard
+
+</div>
+
+</body>
+</html>
