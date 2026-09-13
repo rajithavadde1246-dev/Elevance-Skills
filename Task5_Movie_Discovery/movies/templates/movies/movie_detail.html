@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ movie.title }} - Movie Details</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 900px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #222;
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .details {
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .rating {
+            color: #e6a400;
+            font-weight: bold;
+        }
+
+        .theater-item {
+            background: #f1f1f1;
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 6px;
+        }
+
+        .show-item {
+            background: #f8f8f8;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #333;
+            border-radius: 6px;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 11px 20px;
+            background: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .back-button:hover {
+            background: #555;
+        }
+
+        .empty-message {
+            color: #777;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Movie Title -->
+    <h1>🎬 {{ movie.title }}</h1>
+
+    <!-- Movie Details -->
+    <div class="details">
+
+        <p>
+            <span class="label">Genre:</span>
+            {{ movie.genre.name }}
+        </p>
+
+        <p>
+            <span class="label">Language:</span>
+            {{ movie.language }}
+        </p>
+
+        <p>
+            <span class="label">Release Date:</span>
+            {{ movie.release_date }}
+        </p>
+
+        <p>
+            <span class="label">Rating:</span>
+            <span class="rating">
+                ⭐ {{ movie.rating }}
+            </span>
+        </p>
+
+        <p>
+            <span class="label">Ticket Price:</span>
+            ₹{{ movie.ticket_price }}
+        </p>
+
+        <p>
+            <span class="label">Popularity:</span>
+            {{ movie.popularity }}
+        </p>
+
+    </div>
+
+
+    <!-- Available Theaters -->
+    <h2>🏢 Available Theaters</h2>
+
+    {% for theater in movie.theaters.all %}
+
+        <div class="theater-item">
+
+            🎥 <strong>{{ theater.name }}</strong>
+
+            <br>
+
+            📍 City:
+            {{ theater.city.name }}
+
+        </div>
+
+    {% empty %}
+
+        <p class="empty-message">
+            No theaters available for this movie.
+        </p>
+
+    {% endfor %}
+
+
+    <!-- Available Show Timings -->
+    <h2>🕐 Available Show Timings</h2>
+
+    {% for show in movie.shows.all %}
+
+        <div class="show-item">
+
+            <strong>
+                🎬 {{ show.theater.name }}
+            </strong>
+
+            <br><br>
+
+            📍 {{ show.theater.city.name }}
+
+            <br>
+
+            🕐
+            {{ show.show_time|date:"d M Y, h:i A" }}
+
+            <br>
+
+            💰
+            ₹{{ show.ticket_price }}
+
+        </div>
+
+    {% empty %}
+
+        <p class="empty-message">
+            No show timings available.
+        </p>
+
+    {% endfor %}
+
+
+    <!-- Back Button -->
+    <a href="{% url 'movie_list' %}" class="back-button">
+        ← Back to Movies
+    </a>
+
+</div>
+
+</body>
+
+</html>

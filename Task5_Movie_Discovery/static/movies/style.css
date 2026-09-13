@@ -1,0 +1,223 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #222;
+}
+
+.container {
+    width: 92%;
+    max-width: 1200px;
+    margin: 30px auto;
+}
+
+.header {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.header h1 {
+    margin: 0 0 8px;
+}
+
+.header p {
+    margin: 0;
+    color: #666;
+}
+
+.user-info {
+    color: #555;
+}
+
+.filter-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.filter-card h2 {
+    margin-top: 0;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(220px, 1fr));
+
+    gap: 18px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group label,
+.sort-section label {
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+input,
+select {
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    font-size: 14px;
+}
+
+.sort-section {
+    margin-top: 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    flex-wrap: wrap;
+}
+
+button,
+.reset-button,
+.movie-card a,
+.pagination a {
+    padding: 11px 18px;
+    border: none;
+    border-radius: 7px;
+
+    text-decoration: none;
+
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button {
+    background: #222;
+    color: white;
+}
+
+.reset-button {
+    background: #e5e5e5;
+    color: #222;
+}
+
+.result-info {
+    background: white;
+    padding: 18px 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.result-info h2 {
+    margin: 0;
+}
+
+.recommendation-section,
+.movies-section {
+    margin-bottom: 30px;
+}
+
+.recommendation-section h2,
+.movies-section h2 {
+    margin-bottom: 15px;
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(230px, 1fr));
+
+    gap: 20px;
+}
+
+.movie-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.movie-card h3 {
+    margin-top: 10px;
+}
+
+.movie-card p {
+    color: #555;
+    margin: 8px 0;
+}
+
+.movie-icon {
+    font-size: 45px;
+}
+
+.movie-card a {
+    display: inline-block;
+    margin-top: 12px;
+    background: #222;
+    color: white;
+}
+
+.recommendation-card {
+    border-left: 5px solid #222;
+}
+
+.no-results {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    margin: 30px 0;
+}
+
+.pagination a {
+    background: #222;
+    color: white;
+}
+
+.pagination span {
+    font-weight: bold;
+}
+
+@media (max-width: 700px) {
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .sort-section {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .sort-section select,
+    .sort-section button,
+    .sort-section a {
+        width: 100%;
+        text-align: center;
+    }
+}

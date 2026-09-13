@@ -1,0 +1,713 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Movie Discovery</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #222;
+            margin-bottom: 30px;
+        }
+
+        .filter-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .filter-box h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .button-row {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-button {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background: #555;
+        }
+
+        .reset-button {
+            background: #ddd;
+            color: #222;
+            text-decoration: none;
+            padding: 11px 20px;
+            border-radius: 6px;
+        }
+
+        .reset-button:hover {
+            background: #ccc;
+        }
+
+        .result-count {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .section-title {
+            margin-top: 30px;
+            margin-bottom: 20px;
+            color: #222;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .movie-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .movie-card h3 {
+            margin-top: 0;
+            color: #222;
+        }
+
+        .movie-info {
+            line-height: 1.7;
+            color: #555;
+        }
+
+        .rating {
+            color: #e6a400;
+            font-weight: bold;
+        }
+
+        .details-button {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 9px 15px;
+            background: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .details-button:hover {
+            background: #555;
+        }
+
+        .pagination {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .pagination a,
+        .pagination span {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 3px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .pagination a {
+            background: #333;
+            color: white;
+        }
+
+        .pagination a:hover {
+            background: #555;
+        }
+
+        .current-page {
+            background: #ddd;
+            color: #222;
+        }
+
+        .empty-message {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            color: #777;
+        }
+
+        .recommendation-section {
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .recommendation-card {
+            border-left: 5px solid #333;
+        }
+
+        .footer-space {
+            height: 40px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🎬 Movie Discovery</h1>
+
+
+    <!-- ========================= -->
+    <!-- SEARCH AND FILTER SECTION -->
+    <!-- ========================= -->
+
+    <div class="filter-box">
+
+        <h2>🔎 Search & Filter Movies</h2>
+
+        <form method="GET" action="{% url 'movie_list' %}">
+
+            <div class="filter-grid">
+
+                <!-- Search -->
+                <div>
+                    <label>Movie Title</label>
+
+                    <input
+                        type="text"
+                        name="search"
+                        placeholder="Search movie..."
+                        value="{{ search }}"
+                    >
+                </div>
+
+
+                <!-- Genre -->
+                <div>
+                    <label>Genre</label>
+
+                    <select name="genre">
+
+                        <option value="">All Genres</option>
+
+                        {% for item in genres %}
+
+                            <option
+                                value="{{ item.id }}"
+                                {% if selected_genre == item.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ item.name }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+
+                <!-- Language -->
+                <div>
+
+                    <label>Language</label>
+
+                    <select name="language">
+
+                        <option value="">All Languages</option>
+
+                        {% for code, name in languages %}
+
+                            <option
+                                value="{{ code }}"
+                                {% if selected_language == code %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ name }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- City -->
+                <div>
+
+                    <label>City</label>
+
+                    <select name="city">
+
+                        <option value="">All Cities</option>
+
+                        {% for item in cities %}
+
+                            <option
+                                value="{{ item.id }}"
+                                {% if selected_city == item.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ item.name }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- Theater -->
+                <div>
+
+                    <label>Theater</label>
+
+                    <select name="theater">
+
+                        <option value="">All Theaters</option>
+
+                        {% for item in theaters %}
+
+                            <option
+                                value="{{ item.id }}"
+                                {% if selected_theater == item.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ item.name }} - {{ item.city.name }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- Release Date -->
+                <div>
+
+                    <label>Release Date</label>
+
+                    <input
+                        type="date"
+                        name="release_date"
+                        value="{{ selected_release_date }}"
+                    >
+
+                </div>
+
+
+                <!-- Rating -->
+                <div>
+
+                    <label>Minimum Rating</label>
+
+                    <input
+                        type="number"
+                        name="rating"
+                        min="0"
+                        max="10"
+                        step="0.1"
+                        placeholder="Example: 8.0"
+                        value="{{ selected_rating }}"
+                    >
+
+                </div>
+
+
+                <!-- Show Time -->
+                <div>
+
+                    <label>Show Time</label>
+
+                    <select name="show_time">
+
+                        <option value="">All Show Times</option>
+
+                        {% for hour in "012345678901234567890123"|make_list %}
+
+                            <option
+                                value="{{ forloop.counter0 }}"
+                                {% if selected_show_time == forloop.counter0|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ forloop.counter0 }}:00
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- Sort -->
+                <div>
+
+                    <label>Sort By</label>
+
+                    <select name="sort">
+
+                        <option
+                            value="popularity"
+                            {% if selected_sort == "popularity" %}
+                                selected
+                            {% endif %}
+                        >
+                            Popularity
+                        </option>
+
+                        <option
+                            value="newest"
+                            {% if selected_sort == "newest" %}
+                                selected
+                            {% endif %}
+                        >
+                            Newest Releases
+                        </option>
+
+                        <option
+                            value="rating"
+                            {% if selected_sort == "rating" %}
+                                selected
+                            {% endif %}
+                        >
+                            Rating
+                        </option>
+
+                        <option
+                            value="price_low"
+                            {% if selected_sort == "price_low" %}
+                                selected
+                            {% endif %}
+                        >
+                            Ticket Price: Low to High
+                        </option>
+
+                        <option
+                            value="price_high"
+                            {% if selected_sort == "price_high" %}
+                                selected
+                            {% endif %}
+                        >
+                            Ticket Price: High to Low
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- Buttons -->
+
+            <div class="button-row">
+
+                <button
+                    type="submit"
+                    class="search-button"
+                >
+                    🔎 Apply Filters
+                </button>
+
+
+                <a
+                    href="{% url 'movie_list' %}"
+                    class="reset-button"
+                >
+                    Reset
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- MATCHING MOVIE COUNT -->
+    <!-- ========================= -->
+
+    <div class="result-count">
+
+        🎯 {{ matching_movies }} movies found
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- RECOMMENDED FOR YOU -->
+    <!-- ========================= -->
+
+    {% if recommended_movies %}
+
+        <div class="recommendation-section">
+
+            <h2 class="section-title">
+                🤖 Recommended for You
+            </h2>
+
+            <div class="movie-grid">
+
+                {% for movie in recommended_movies %}
+
+                    <div class="movie-card recommendation-card">
+
+                        <h3>
+                            🎬 {{ movie.title }}
+                        </h3>
+
+                        <div class="movie-info">
+
+                            <p>
+                                <strong>Genre:</strong>
+                                {{ movie.genre.name }}
+                            </p>
+
+                            <p>
+                                <strong>Language:</strong>
+                                {{ movie.language }}
+                            </p>
+
+                            <p>
+                                <strong>Release Date:</strong>
+                                {{ movie.release_date }}
+                            </p>
+
+                            <p>
+                                <strong>Rating:</strong>
+
+                                <span class="rating">
+                                    ⭐ {{ movie.rating }}
+                                </span>
+
+                            </p>
+
+                            <p>
+                                <strong>Ticket Price:</strong>
+                                ₹{{ movie.ticket_price }}
+                            </p>
+
+                            <p>
+                                <strong>Popularity:</strong>
+                                {{ movie.popularity }}
+                            </p>
+
+                        </div>
+
+
+                        <a
+                            href="{% url 'movie_detail' movie.id %}"
+                            class="details-button"
+                        >
+                            View Details
+                        </a>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- ========================= -->
+    <!-- MOVIE RESULTS -->
+    <!-- ========================= -->
+
+    <h2 class="section-title">
+        🎥 Movies
+    </h2>
+
+
+    {% if movies %}
+
+        <div class="movie-grid">
+
+            {% for movie in movies %}
+
+                <div class="movie-card">
+
+                    <h3>
+                        🎬 {{ movie.title }}
+                    </h3>
+
+
+                    <div class="movie-info">
+
+                        <p>
+                            <strong>Genre:</strong>
+                            {{ movie.genre.name }}
+                        </p>
+
+
+                        <p>
+                            <strong>Language:</strong>
+                            {{ movie.language }}
+                        </p>
+
+
+                        <p>
+                            <strong>Release Date:</strong>
+                            {{ movie.release_date }}
+                        </p>
+
+
+                        <p>
+
+                            <strong>Rating:</strong>
+
+                            <span class="rating">
+                                ⭐ {{ movie.rating }}
+                            </span>
+
+                        </p>
+
+
+                        <p>
+                            <strong>Ticket Price:</strong>
+                            ₹{{ movie.ticket_price }}
+                        </p>
+
+
+                        <p>
+                            <strong>Popularity:</strong>
+                            {{ movie.popularity }}
+                        </p>
+
+                    </div>
+
+
+                    <a
+                        href="{% url 'movie_detail' movie.id %}"
+                        class="details-button"
+                    >
+                        View Details
+                    </a>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- PAGINATION -->
+        <!-- ========================= -->
+
+        {% if page_obj.has_other_pages %}
+
+            <div class="pagination">
+
+                {% if page_obj.has_previous %}
+
+                    <a
+                        href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value|urlencode }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}"
+                    >
+                        ← Previous
+                    </a>
+
+                {% endif %}
+
+
+                <span class="current-page">
+
+                    Page
+                    {{ page_obj.number }}
+                    of
+                    {{ page_obj.paginator.num_pages }}
+
+                </span>
+
+
+                {% if page_obj.has_next %}
+
+                    <a
+                        href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value|urlencode }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}"
+                    >
+                        Next →
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+
+
+    {% else %}
+
+        <p class="empty-message">
+            😔 No movies found matching your filters.
+        </p>
+
+    {% endif %}
+
+
+    <div class="footer-space"></div>
+
+</div>
+
+</body>
+
+</html>
