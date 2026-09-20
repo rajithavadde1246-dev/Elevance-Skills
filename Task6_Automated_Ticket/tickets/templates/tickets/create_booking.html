@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Create Movie Booking</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            margin-top: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 13px;
+            border: none;
+            background: #222;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        .history {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🎬 Movie Booking</h1>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <label>Movie Name</label>
+
+        <input
+            type="text"
+            name="movie_name"
+            value="Pushpa 2"
+            required
+        >
+
+        <label>Theater</label>
+
+        <input
+            type="text"
+            name="theater"
+            value="PVR Cinemas"
+            required
+        >
+
+        <label>Screen</label>
+
+        <input
+            type="text"
+            name="screen"
+            value="Screen 1"
+            required
+        >
+
+        <label>Show Date</label>
+
+        <input
+            type="date"
+            name="show_date"
+            value="2026-09-15"
+            required
+        >
+
+        <label>Show Time</label>
+
+        <input
+            type="time"
+            name="show_time"
+            value="21:00"
+            required
+        >
+
+        <label>Booked Seats</label>
+
+        <input
+            type="text"
+            name="seats"
+            value="A1, A2"
+            required
+        >
+
+        <label>Payment Reference</label>
+
+        <input
+            type="text"
+            name="payment_reference"
+            value="PAY_TEST_1001"
+            required
+        >
+
+        <button type="submit">
+            ✅ Confirm Successful Booking
+        </button>
+
+    </form>
+
+    <a
+        class="history"
+        href="{% url 'booking_history' %}"
+    >
+        📋 Booking History
+    </a>
+
+</div>
+
+</body>
+</html>

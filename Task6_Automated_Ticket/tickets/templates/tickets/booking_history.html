@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Booking History</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .booking {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .booking h2 {
+            margin-top: 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #222;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .pending {
+            color: #b26a00;
+        }
+
+        .sent {
+            color: green;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📋 My Booking History</h1>
+
+    {% for booking in bookings %}
+
+        <div class="booking">
+
+            <h2>
+                🎬 {{ booking.movie_name }}
+            </h2>
+
+            <p>
+                <strong>Booking ID:</strong>
+                {{ booking.booking_id }}
+            </p>
+
+            <p>
+                <strong>Theater:</strong>
+                {{ booking.theater }}
+            </p>
+
+            <p>
+                <strong>Screen:</strong>
+                {{ booking.screen }}
+            </p>
+
+            <p>
+                <strong>Date:</strong>
+                {{ booking.show_date }}
+            </p>
+
+            <p>
+                <strong>Time:</strong>
+                {{ booking.show_time }}
+            </p>
+
+            <p>
+                <strong>Seats:</strong>
+                {{ booking.seats }}
+            </p>
+
+            <p>
+                <strong>Payment Reference:</strong>
+                {{ booking.payment_reference }}
+            </p>
+
+            {% if booking.email_sent %}
+
+                <p class="sent">
+                    ✅ Ticket emailed successfully
+                </p>
+
+            {% else %}
+
+                <p class="pending">
+                    ⏳ Ticket is being processed...
+                </p>
+
+            {% endif %}
+
+
+            {% if booking.ticket_pdf %}
+
+                <a
+                    class="button"
+                    href="{% url 'download_ticket' booking.booking_id %}"
+                >
+                    🎟️ Download Ticket
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    {% empty %}
+
+        <div class="booking">
+
+            <h2>No bookings found.</h2>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+
+</html>

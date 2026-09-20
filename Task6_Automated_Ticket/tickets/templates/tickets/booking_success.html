@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Booking Successful</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 50px;
+        }
+
+        .box {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            text-align: center;
+            border-radius: 12px;
+        }
+
+        .success {
+            font-size: 50px;
+        }
+
+        .details {
+            text-align: left;
+            margin-top: 25px;
+            line-height: 1.8;
+        }
+
+        a {
+            display: inline-block;
+            margin: 10px;
+            padding: 12px 18px;
+            background: #222;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+    <div class="success">✅</div>
+
+    <h1>Booking Successful!</h1>
+
+    <p>
+        Your booking has been confirmed.
+    </p>
+
+    <div class="details">
+
+        <strong>Booking ID:</strong>
+        {{ booking.booking_id }}
+
+        <br>
+
+        <strong>Movie:</strong>
+        {{ booking.movie_name }}
+
+        <br>
+
+        <strong>Theater:</strong>
+        {{ booking.theater }}
+
+        <br>
+
+        <strong>Screen:</strong>
+        {{ booking.screen }}
+
+        <br>
+
+        <strong>Date:</strong>
+        {{ booking.show_date }}
+
+        <br>
+
+        <strong>Time:</strong>
+        {{ booking.show_time }}
+
+        <br>
+
+        <strong>Seats:</strong>
+        {{ booking.seats }}
+
+        <br>
+
+        <strong>Payment:</strong>
+        {{ booking.payment_reference }}
+
+    </div>
+
+    <p>
+        🎟️ Your PDF ticket is being generated
+        and will be emailed in the background.
+    </p>
+
+    <a href="{% url 'booking_history' %}">
+        📋 Booking History
+    </a>
+
+</div>
+
+</body>
+
+</html>
