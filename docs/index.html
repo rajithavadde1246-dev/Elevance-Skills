@@ -1,108 +1,377 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>ElevanceSkills Internship</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Elevance Skills Internship | Full-Stack Projects</title>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
-            background: #f4f6f8;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        header {
-            background: #1f2937;
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f6f8;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        /* HERO */
+        .hero {
+            background: #111827;
             color: white;
-            padding: 40px 20px;
             text-align: center;
+            padding: 90px 20px;
         }
 
-        header h1 {
-            margin: 0 0 10px;
+        .hero h1 {
+            font-size: 18px;
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+            font-weight: 700;
         }
 
+        .hero h2 {
+            font-size: 44px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            max-width: 780px;
+            margin: auto;
+            color: #d1d5db;
+            font-size: 17px;
+        }
+
+        /* PROJECT SECTION */
         .container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 20px;
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 65px 20px;
         }
 
-        .tasks {
+        .section-title {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: #6b7280;
+        }
+
+        /* CARDS */
+        .projects {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
         }
 
         .card {
             background: white;
-            padding: 25px;
+            border: 1px solid #e5e7eb;
             border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            min-height: 300px;
+            transition: 0.25s;
         }
 
-        .number {
-            color: #666;
-            font-size: 14px;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        .task {
+            font-size: 13px;
             font-weight: bold;
+            color: #6b7280;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
         }
 
-        .card h2 {
-            margin-bottom: 10px;
+        .card h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: #6b7280;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* TECHNOLOGIES */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .tag {
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #374151;
+        }
+
+        /* BUTTON */
+        .button {
+            display: inline-block;
+            margin-top: auto;
+            background: #111827;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            padding: 11px 18px;
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .button:hover {
+            background: #374151;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #111827;
+            color: #9ca3af;
+            text-align: center;
+            padding: 25px;
+            font-size: 14px;
+        }
+
+        /* MOBILE */
+        @media (max-width: 900px) {
+            .projects {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero h2 {
+                font-size: 36px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .projects {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 65px 20px;
+            }
+
+            .hero h2 {
+                font-size: 30px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<header>
-    <h1>ElevanceSkills Internship</h1>
-    <p>Full Stack Web Development – Tasks 1 to 6</p>
-</header>
+    <!-- HERO -->
+    <section class="hero">
+        <h1>ELEVANCE SKILLS INTERNSHIP</h1>
 
-<div class="container">
+        <h2>Full-Stack Development Projects</h2>
 
-    <h2>My Internship Projects</h2>
+        <p>
+            A collection of six Django-based projects developed during my
+            full-stack internship, covering movie management, reservations,
+            payments, analytics, discovery, and automated ticket generation.
+        </p>
+    </section>
 
-    <div class="tasks">
 
-        <div class="card">
-            <div class="number">TASK 1</div>
-            <h2>Movie Management</h2>
-            <p>Movie management, registration, login, booking and reviews.</p>
+    <!-- PROJECTS -->
+    <section class="container">
+
+        <div class="section-title">
+            <h2>My Internship Projects</h2>
+            <p>Six Django projects developed as part of my Full-Stack Web Development Internship.</p>
         </div>
 
-        <div class="card">
-            <div class="number">TASK 2</div>
-            <h2>Smart Seat Reservation</h2>
-            <p>Movie shows and smart seat reservation system.</p>
-        </div>
 
-        <div class="card">
-            <div class="number">TASK 3</div>
-            <h2>Payment & Booking</h2>
-            <p>Booking, payment, cancellation and payment history.</p>
-        </div>
+        <div class="projects">
 
-        <div class="card">
-            <div class="number">TASK 4</div>
-            <h2>Admin Dashboard</h2>
-            <p>Revenue, bookings, occupancy and admin analytics.</p>
-        </div>
+            <!-- TASK 1 -->
+            <div class="card">
+                <div class="task">TASK 1</div>
 
-        <div class="card">
-            <div class="number">TASK 5</div>
-            <h2>Movie Discovery</h2>
-            <p>Movie discovery and recommendation features.</p>
-        </div>
+                <h3>Movie Management System</h3>
 
-        <div class="card">
-            <div class="number">TASK 6</div>
-            <h2>Automated Ticket</h2>
-            <p>Ticket generation and automated booking workflow.</p>
-        </div>
+                <p>
+                    A Django-based movie management system with user
+                    registration, login, movie management, bookings and reviews.
+                </p>
 
-    </div>
-</div>
+                <div class="tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Django</span>
+                    <span class="tag">SQLite</span>
+                    <span class="tag">HTML</span>
+                </div>
+
+                <a class="button"
+                   href="https://github.com/rajithavadde1246-dev/Elevance-Skills/tree/render-deployment/Task1_Movie_Management"
+                   target="_blank">
+                    View Project
+                </a>
+            </div>
+
+
+            <!-- TASK 2 -->
+            <div class="card">
+                <div class="task">TASK 2</div>
+
+                <h3>Smart Seat Reservation</h3>
+
+                <p>
+                    A smart movie seat reservation system for managing shows,
+                    seats, availability and reservations.
+                </p>
+
+                <div class="tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Django</span>
+                    <span class="tag">SQLite</span>
+                    <span class="tag">HTML</span>
+                </div>
+
+                <a class="button"
+                   href="https://github.com/rajithavadde1246-dev/Elevance-Skills/tree/render-deployment/Task2_Smart_Seat_Reservation"
+                   target="_blank">
+                    View Project
+                </a>
+            </div>
+
+
+            <!-- TASK 3 -->
+            <div class="card">
+                <div class="task">TASK 3</div>
+
+                <h3>Payment Workflow</h3>
+
+                <p>
+                    A movie booking and payment workflow supporting successful,
+                    failed and cancelled payment scenarios with booking history.
+                </p>
+
+                <div class="tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Django</span>
+                    <span class="tag">Razorpay</span>
+                    <span class="tag">SQLite</span>
+                </div>
+
+                <a class="button"
+                   href="https://github.com/rajithavadde1246-dev/Elevance-Skills"
+                   target="_blank">
+                    View Project
+                </a>
+            </div>
+
+
+            <!-- TASK 4 -->
+            <div class="card">
+                <div class="task">TASK 4</div>
+
+                <h3>Admin Analytics Dashboard</h3>
+
+                <p>
+                    An admin dashboard providing revenue analytics, booking
+                    trends, occupancy statistics and movie performance insights.
+                </p>
+
+                <div class="tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Django</span>
+                    <span class="tag">ORM</span>
+                    <span class="tag">CSV</span>
+                </div>
+
+                <a class="button"
+                   href="https://github.com/rajithavadde1246-dev/Elevance-Skills/tree/render-deployment/Task4_Admin_Dashboard"
+                   target="_blank">
+                    View Project
+                </a>
+            </div>
+
+
+            <!-- TASK 5 -->
+            <div class="card">
+                <div class="task">TASK 5</div>
+
+                <h3>Movie Discovery Platform</h3>
+
+                <p>
+                    A movie discovery application designed to help users
+                    explore movies and discover relevant recommendations.
+                </p>
+
+                <div class="tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Django</span>
+                    <span class="tag">API</span>
+                    <span class="tag">HTML</span>
+                </div>
+
+                <a class="button"
+                   href="https://github.com/rajithavadde1246-dev/Elevance-Skills/tree/render-deployment/Task5_Movie_Discovery"
+                   target="_blank">
+                    View Project
+                </a>
+            </div>
+
+
+            <!-- TASK 6 -->
+            <div class="card">
+                <div class="task">TASK 6</div>
+
+                <h3>Automated Ticket Generation</h3>
+
+                <p>
+                    An automated ticket generation system that creates PDF
+                    tickets with booking details and QR-code verification.
+                </p>
+
+                <div class="tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Django</span>
+                    <span class="tag">Celery</span>
+                    <span class="tag">QR Code</span>
+                </div>
+
+                <a class="button"
+                   href="https://github.com/rajithavadde1246-dev/Elevance-Skills/tree/render-deployment/Task6_Automated_Ticket"
+                   target="_blank">
+                    View Project
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+        © 2026 Rajitha | Elevance Skills Full-Stack Web Development Internship
+    </footer>
 
 </body>
 </html>
